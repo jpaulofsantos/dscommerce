@@ -8,6 +8,7 @@ public class DscommerceApplication {
 	//steps
 	//1-começar com a criação de classes com entidades independentes (nas pontas quem falam com uma entidade que tenha muitos *) -> ex: User
 	//2-criar classes muitos para 1
+	//Criar classes 1 para 1
 
 	public static void main(String[] args) {
 

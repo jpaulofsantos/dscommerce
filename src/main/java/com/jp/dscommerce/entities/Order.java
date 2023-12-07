@@ -17,16 +17,19 @@ public class Order {
     @ManyToOne //cria a chave estrangeira abaixo
     @JoinColumn(name = "client_id") //nome client retirado da documentação
     private User client; //uma Order possui um client
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     public Order(){
 
     }
 
-    public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
+    public Order(Long id, Instant moment, OrderStatus orderStatus, User client, Payment payment) {
         this.id = id;
         this.moment = moment;
         this.orderStatus = orderStatus;
         this.client = client;
+        this.payment = payment;
     }
 
     public Long getId() {
@@ -59,5 +62,13 @@ public class Order {
 
     public void setMoment(Instant moment) {
         this.moment = moment;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 }
