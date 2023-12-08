@@ -88,6 +88,8 @@ public class Product {
 
         }
     };
+    @OneToMany(mappedBy = "id.product") //do outro lado (em OrderItemPK) existe uma relação ManyToOne
+    private Set<OrderItem> items = new HashSet<>(); //set de orderItems para buscar os products
 
     public Product() {
 
@@ -143,5 +145,13 @@ public class Product {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    public Set<OrderItem> getProduct(){
+        return items;
+    }
+
+    public List<Order> getOrders(){ //pegando a lista de orders dentro do Set de OrderItem
+        return items.stream().map(x->x.getOrder()).toList(); //para cada elemento x, busca as orders
     }
 }
