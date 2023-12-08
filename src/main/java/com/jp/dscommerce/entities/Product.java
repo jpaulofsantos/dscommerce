@@ -154,4 +154,17 @@ public class Product {
     public List<Order> getOrders(){ //pegando a lista de orders dentro do Set de OrderItem
         return items.stream().map(x->x.getOrder()).toList(); //para cada elemento x, busca as orders
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
