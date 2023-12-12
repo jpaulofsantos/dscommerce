@@ -7,9 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-
 @RestController //possibilita resposta da classe na web
 @RequestMapping(value = "/products")
 public class ProductController {
