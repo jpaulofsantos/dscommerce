@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +25,20 @@ public class ProductService { //service devolve um DTO para o Controller
     public Page<ProductDTO> findAll(Pageable pageable) {
         Page<Product> resultList = productRepository.findAll(pageable); //busca no banco de dados a lista com todos os registros
         return resultList.map(x-> new ProductDTO(x)); //converte a lista em um ProductDTO
+    }
+
+    @Transactional
+    public ProductDTO insert(ProductDTO dto){ //recebe o JSON e instancia em um product DTO
+
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setImgUrl(dto.getImgUrl());
+
+        product = productRepository.save(product);
+
+        return new ProductDTO(product);
+
     }
 }
