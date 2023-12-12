@@ -5,7 +5,11 @@ import com.jp.dscommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController //possibilita resposta da classe na web
 @RequestMapping(value = "/products")
@@ -15,17 +19,22 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping(value = "/{id}")
-    public ProductDTO findById(@PathVariable Long id) { //@PathVariable id é o mesmo id da rota do @GetMapping {id}
-        return productService.findById(id);
+    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) { //@PathVariable id é o mesmo id da rota do @GetMapping {id}
+        ProductDTO dto = productService.findById(id);
+        return ResponseEntity.ok(dto); //customizando o response
     }
 
     @GetMapping //http://localhost:8080/products?size=12&page=1&sort=name,desc (passando um query param de 12 resultados por pagina e filtrando pela pagina 2 e ordenando pelo name em order descrescente)
-    public Page<ProductDTO> findAll(Pageable pageable){ //retorno com paginação. Caso queira retornar todos os dados basta remover o parametro do metodo e alterar para List ao inves de Page
-        return productService.findAll(pageable);
+    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){ //retorno com paginação. Caso queira retornar todos os dados basta remover o parametro do metodo e alterar para List ao inves de Page
+
+        Page<ProductDTO> dtoPage = productService.findAll(pageable);
+        return ResponseEntity.ok(dtoPage);
     }
 
     @PostMapping
-    public ProductDTO insert(@RequestBody ProductDTO dto) { //o corpo da requisição que chega, entra nesse parametro e instancia um novo dto
-        return productService.insert(dto);
+    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) { //o corpo da requisição que chega, entra nesse parametro e instancia um novo dto
+        ProductDTO productDTO = productService.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productDTO.getId()).toUri();
+        return ResponseEntity.created(uri).body(productDTO); //passando o cod HTTP 201 de created
     }
 }
