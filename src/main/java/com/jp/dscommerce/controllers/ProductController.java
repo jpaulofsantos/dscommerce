@@ -26,7 +26,6 @@ public class ProductController {
 
     @GetMapping //http://localhost:8080/products?size=12&page=1&sort=name,desc (passando um query param de 12 resultados por pagina e filtrando pela pagina 2 e ordenando pelo name em order descrescente)
     public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){ //retorno com paginação. Caso queira retornar todos os dados basta remover o parametro do metodo e alterar para List ao inves de Page
-
         Page<ProductDTO> dtoPage = productService.findAll(pageable);
         return ResponseEntity.ok(dtoPage);
     }
@@ -36,5 +35,11 @@ public class ProductController {
         ProductDTO productDTO = productService.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(productDTO); //passando o cod HTTP 201 de created
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto){
+        dto = productService.update(id, dto);
+        return ResponseEntity.ok(dto);
     }
 }

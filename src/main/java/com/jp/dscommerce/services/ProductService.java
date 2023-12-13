@@ -12,8 +12,10 @@ import java.util.Optional;
 
 @Service
 public class ProductService { //service devolve um DTO para o Controller
+
     @Autowired
     private ProductRepository productRepository; //injeta o productRepository
+
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
         Optional<Product> result = productRepository.findById(id); //busca no banco de dados o objeto passando o ID
@@ -29,16 +31,24 @@ public class ProductService { //service devolve um DTO para o Controller
 
     @Transactional
     public ProductDTO insert(ProductDTO dto){ //recebe o JSON e instancia em um product DTO
-
         Product product = new Product();
+        copyDtoToEntity(product, dto);
+        product = productRepository.save(product);
+        return new ProductDTO(product);
+    }
+
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO dto){
+        Product product = productRepository.getReferenceById(id); //instancia um produto com a referência do id passado (não faz a busca no banco de dados)
+        copyDtoToEntity(product, dto);
+        product = productRepository.save(product);
+        return new ProductDTO(product);
+    }
+
+    public void copyDtoToEntity(Product product, ProductDTO dto){
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setImgUrl(dto.getImgUrl());
-
-        product = productRepository.save(product);
-
-        return new ProductDTO(product);
-
     }
 }
