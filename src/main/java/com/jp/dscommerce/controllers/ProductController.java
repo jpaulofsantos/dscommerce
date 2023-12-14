@@ -1,6 +1,7 @@
 package com.jp.dscommerce.controllers;
 
 import com.jp.dscommerce.dto.ProductDTO;
+import com.jp.dscommerce.entities.Product;
 import com.jp.dscommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,5 +42,11 @@ public class ProductController {
     public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto){
         dto = productService.update(id, dto);
         return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        productService.delete(id);
+        return ResponseEntity.noContent().build(); //returns 204 ok (no body)
     }
 }

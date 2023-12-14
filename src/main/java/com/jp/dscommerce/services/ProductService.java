@@ -44,6 +44,10 @@ public class ProductService { //service devolve um DTO para o Controller
         product = productRepository.save(product);
         return new ProductDTO(product);
     }
+    @Transactional
+    public void delete(Long id){
+        productRepository.deleteById(id);
+    }
 
     public void copyDtoToEntity(Product product, ProductDTO dto){
         product.setName(dto.getName());
