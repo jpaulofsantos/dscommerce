@@ -3,6 +3,7 @@ package com.jp.dscommerce.controllers;
 import com.jp.dscommerce.dto.ProductDTO;
 import com.jp.dscommerce.entities.Product;
 import com.jp.dscommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,14 +33,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) { //o corpo da requisição que chega, entra nesse parametro e instancia um novo dto
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) { //o corpo da requisição que chega, entra nesse parametro e instancia um novo dto. @Valid verifica
         ProductDTO productDTO = productService.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(productDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(productDTO); //passando o cod HTTP 201 de created
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto){
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto){
         dto = productService.update(id, dto);
         return ResponseEntity.ok(dto);
     }
