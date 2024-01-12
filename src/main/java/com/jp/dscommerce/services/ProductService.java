@@ -28,8 +28,9 @@ public class ProductService { //service devolve um DTO para o Controller e trata
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(Pageable pageable) {
-        Page<Product> resultList = productRepository.findAll(pageable); //busca no banco de dados a lista com todos os registros
+    public Page<ProductDTO> findAll(String name, Pageable pageable) {
+        //Page<Product> resultList = productRepository.findAll(pageable); //busca no banco de dados a lista com todos os registros (findAll padrão do repository, usa apenas o parametro Pageable neste caso. O parm name foi add para a consulta customizada)
+        Page<Product> resultList = productRepository.searchByName(name, pageable); //searchByName customizado
         return resultList.map(x-> new ProductDTO(x)); //converte a lista em um ProductDTO
     }
 

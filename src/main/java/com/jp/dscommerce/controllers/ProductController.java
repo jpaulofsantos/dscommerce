@@ -27,8 +27,9 @@ public class ProductController {
     }
 
     @GetMapping //http://localhost:8080/products?size=12&page=1&sort=name,desc (passando um query param de 12 resultados por pagina e filtrando pela pagina 2 e ordenando pelo name em order descrescente)
-    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){ //retorno com paginação. Caso queira retornar todos os dados basta remover o parametro do metodo e alterar para List ao inves de Page
-        Page<ProductDTO> dtoPage = productService.findAll(pageable);
+    public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(name = "name", defaultValue = "") String name, Pageable pageable){ //retorno com paginação. Caso queira retornar todos os dados basta remover o parametro do metodo e alterar para List ao inves de Page
+        //Page<ProductDTO> dtoPage = productService.findAll(pageable);
+        Page<ProductDTO> dtoPage = productService.findAll(name, pageable);
         return ResponseEntity.ok(dtoPage);
     }
 
